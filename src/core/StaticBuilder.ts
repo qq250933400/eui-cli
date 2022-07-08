@@ -1,4 +1,5 @@
 import { BaseBuilder, EnumLogType } from "./BaseBuilder";
+import * as path from "path";
 
 export class StaticBuilder extends BaseBuilder {
     srcPath:string;
@@ -6,8 +7,8 @@ export class StaticBuilder extends BaseBuilder {
     io: any;
     constructor(fs:any,srcPath:string, desPath:string) {
         super(fs);
-        this.srcPath = srcPath;
-        this.desPath = desPath;
+        this.srcPath = path.resolve(process.cwd(),srcPath);
+        this.desPath = path.resolve(process.cwd(),desPath);
         this.io = fs;
     }
     setSrcPath(path:string):void {

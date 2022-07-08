@@ -75,12 +75,25 @@ export class BaseBuilder extends Base {
         });
     }
     saveFile(fileName:string, data: any):void {
+        const isWin = /^[a-z]\:/i.test(fileName);
+        const saveFileName = isWin ? fileName.replace(/\//g, "\\") : fileName.replace(/\\/g,"/");
+        this.checkDir(fileName);
+        this.fs.writeFileSync(saveFileName, data);
+        this.log("复制文件：" + fileName, "SUCCESS");
+    }
+    /**
+     * 检查文件路径，不存在则创建目录
+     * @param fileName - 文件路径
+     * @param isPath - 否文件目录
+     */
+    checkDir(fileName: string, isPath: boolean = false): void {
         const tmpFile = fileName.replace(/\\/g,"/");
         const tIndex = tmpFile.lastIndexOf("/");
-        if(!/^\//.test(tmpFile)) {
+        const isWin = /^[a-z]\:/i.test(fileName);
+        const tmpPath = isPath ? fileName : (tIndex > 0 ? tmpFile.substr(0, tIndex) : "");
+        if(isWin) {
             // Windows系统
-            if(tIndex>0) {
-                const tmpPath = tmpFile.substr(0, tIndex);
+            if(tmpPath.length > 0) {
                 const tmpArr = tmpPath.split("/");
                 let tmpStrPath = "";
                 for(let i = 0;i<tmpArr.length; i++) {
@@ -93,12 +106,10 @@ export class BaseBuilder extends Base {
                         }
                     }
                 }
-                this.fs.writeFileSync(fileName, data);
             }
         } else {
             // linux系统
-            if(tIndex>0) {
-                const tmpPath = tmpFile.substr(0, tIndex);
+            if(tmpPath.length>0) {
                 const tmpArr = tmpPath.split("/");
                 let tmpStrPath = "";
                 for(let i = 0;i<tmpArr.length; i++) {
@@ -110,11 +121,7 @@ export class BaseBuilder extends Base {
                     }
                 }
             }
-            const saveFileName = fileName.replace(/\\/g,"/");
-            this.fs.writeFileSync(saveFileName, data);
         }
-        this.log("复制文件：" + fileName, "INFO");
-        console.log(this.formatLog("复制文件：" + fileName, EnumLogType.INFO));
     }
     formatLog(msg: string, type:EnumLogType): string {
         const now = (new Date()).format("YYYY-MM-DD HH:ii:ss");

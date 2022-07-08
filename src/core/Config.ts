@@ -135,7 +135,7 @@ export default class Config {
         return webpackConfig;
     }
     staticBuilderConfig(): TypeStaticBuilderConfig {
-        return this.readConfig<any>().static || {};
+        return this.readConfig<any>()?.static || {};
     }
     private readEntryConfig(entryConfig: any) {
         const rootPath = process.cwd();
