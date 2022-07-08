@@ -56,7 +56,10 @@ type TypeWebpackConfig = {
     entry?: any;
     devServer?: TypeWebpackDevServer;
 };
-
+type TypeStaticBuilderConfig = {
+    srcPath: string;
+    desPath: string;
+}
 export default class Config {
     readConfig<T={}>(): T {
         const packageJson = path.resolve(process.cwd(), "./package.json");
@@ -130,6 +133,9 @@ export default class Config {
             ...entryData
         };
         return webpackConfig;
+    }
+    staticBuilderConfig(): TypeStaticBuilderConfig {
+        return this.readConfig<any>().static || {};
     }
     private readEntryConfig(entryConfig: any) {
         const rootPath = process.cwd();

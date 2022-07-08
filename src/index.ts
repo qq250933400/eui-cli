@@ -4,6 +4,9 @@ import CommandHelper from "elmer-common/lib/CommandHelper";
 import "colors";
 import devServer from "./webpack/server";
 import webpackBuild from "./webpack/build";
+import Config from "./core/Config";
+import { StaticBuilder } from "./core/StaticBuilder";
+import * as fs from "fs";
 
 const command = new CommandHelper(process.argv);
 
@@ -20,6 +23,12 @@ command
     })
     .command("build", "Build package", () => {
         webpackBuild();
+    })
+    .command("static", "Copy assets files", () => {
+        const config = new Config();
+        const configData = config.staticBuilderConfig();
+        const builder = new StaticBuilder(fs, configData.srcPath, configData.desPath);
+        builder.run();
     })
     .init((opt): any => {
         const initResult = {

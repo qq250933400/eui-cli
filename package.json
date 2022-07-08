@@ -1,6 +1,6 @@
 {
     "name": "eui-cli",
-    "version": "1.0.5",
+    "version": "1.1.0",
     "description": "",
     "typings": "lib/index.d.ts",
     "main": "lib/index.js",
@@ -17,7 +17,11 @@
             "contentBase": "./src"
         },
         "hashFileName": false,
-        "common": "./public/webpack.config.js"
+        "common": "./public/webpack.config.js",
+        "static": {
+            "srcPath": "./src",
+            "desPath": "./lib"
+        }
     },
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
